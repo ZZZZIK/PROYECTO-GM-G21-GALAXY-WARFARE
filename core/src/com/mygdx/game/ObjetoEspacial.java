@@ -7,17 +7,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class ObjetoEspacial implements Destructible {
     protected Sprite sprite;
     protected boolean destruido;
+    protected int hits,hitsMax;
     
-    public ObjetoEspacial(float x, float y, int size, Texture texture) {
+    
+   
+    public ObjetoEspacial(float x, float y, int size, Texture texture,int hits, int hitsMax) {
         this.sprite = new Sprite(texture);
         this.sprite.setSize(size, size);
         this.sprite.setPosition(x, y);
         this.destruido = false;
+        this.hits = hits;
+        this.hitsMax=hitsMax;
+   
     }
     
     public void dibujo(SpriteBatch batch){
         if(!destruido){
             sprite.draw(batch);
+  
         }  
     }
     
@@ -29,12 +36,13 @@ public abstract class ObjetoEspacial implements Destructible {
     
     @Override
     public void setDestruir() {
-        destruido = true;
+        hits++;
     }
 
     @Override
     public boolean getEstaDestruido() {
-        return destruido;
+        return hits>=hitsMax;
+               
     }
     
     public Sprite getSprite() {

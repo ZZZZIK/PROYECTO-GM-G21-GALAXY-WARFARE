@@ -10,19 +10,22 @@ import com.badlogic.gdx.math.Vector2;
 
 public class MeteoritoComun extends ObjetoEspacial{
 
-    
+    private int hits;
     private Vector2 velocidad;
     
   
     
     public MeteoritoComun(float x,float y,int size, float xSpeed, float ySpeed, Texture tx){
-        super(x,y,size,tx);
+        
+        super(x,y,size,tx,0,1);
         //Creamos un vector con los componentes X e Y de la velocidad
         this.velocidad = new Vector2(xSpeed, ySpeed);
     }
-    
-    
-    
+    /*
+    public void dibujo(SpriteBatch batch) {
+        batch.draw(sprite.getTexture(),sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+    }
+    */
    
     public void update() {
     if (!getEstaDestruido()) {
