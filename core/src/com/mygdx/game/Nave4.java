@@ -85,7 +85,7 @@ public class Nave4 {
  	}
         
         
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {         
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE ) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) ) {         
             Bala  bala = new Bala(spr.getX()+spr.getWidth()/2-5,spr.getY()+ spr.getHeight()-5,0,10,txBala);
 	    juego.agregarBala(bala);
 	    soundBala.play();

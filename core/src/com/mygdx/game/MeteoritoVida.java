@@ -13,7 +13,7 @@ public class MeteoritoVida extends ObjetoEspacial{
     private int hits;
     private Vector2 velocidad;
 
-    public MeteoritoVida(int x, int y, int size, int xSpeed, int ySpeed, Texture tx) {        
+    public MeteoritoVida(float x, float y, int size, int xSpeed, int ySpeed, Texture tx) {        
         super(x,y,size,tx,0,1);
         //Creamos un vector con los componentes X e Y de la velocidad
         this.velocidad = new Vector2(xSpeed, ySpeed);
@@ -31,6 +31,11 @@ public class MeteoritoVida extends ObjetoEspacial{
             if (sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight() - sprite.getHeight()) {
                 reboteY();
             }
+            // Verificar si el meteorito ha salido completamente de la pantalla
+            if (sprite.getX() + sprite.getWidth() < 0 || sprite.getX() > Gdx.graphics.getWidth() || sprite.getY() + sprite.getHeight() < 0 || sprite.getY() > Gdx.graphics.getHeight()) {
+                setDestruir(); // Marcar el meteorito como destruido
+            }
+            
         }
     }
 
