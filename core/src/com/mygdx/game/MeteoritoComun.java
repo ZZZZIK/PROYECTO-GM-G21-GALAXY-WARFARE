@@ -26,18 +26,11 @@ public class MeteoritoComun extends ObjetoEspacial{
             // Verificamos si el meteorito se salió de la pantalla horizontalmente
             if (sprite.getX() < 0 || sprite.getX() > Gdx.graphics.getWidth() - sprite.getWidth()) {
                 reboteX();
-
             }
             // Verificamos si el meteorito se salió de la pantalla verticalmente
             if (sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight() - sprite.getHeight()) {
                 reboteY();
-            }
-            // Verificar si el meteorito ha salido completamente de la pantalla
-            if (sprite.getX() + sprite.getWidth() < 0 || sprite.getX() > Gdx.graphics.getWidth() || sprite.getY() + sprite.getHeight() < 0 || sprite.getY() > Gdx.graphics.getHeight()) {
-                setDestruir(); // Marcar el meteorito como destruido
-            }
-            
-            
+            }   
         }
     }
 

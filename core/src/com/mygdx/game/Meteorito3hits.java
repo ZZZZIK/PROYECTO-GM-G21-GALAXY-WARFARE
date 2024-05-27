@@ -9,15 +9,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Meteorito3hits extends ObjetoEspacial{
-
     private Vector2 velocidad;
-    
-   //float x,float y,int size, float xSpeed, float ySpeed, Texture tx
+   
     public Meteorito3hits(float x, float y, int size, int xSpeed, int ySpeed, Texture tx) {
         super(x,y,size,tx,0,3);
-        
         //Creamos un vector con los componentes X e Y de la velocidad
-        //this.sprite.setSize(800, 800);
         this.velocidad = new Vector2(xSpeed, ySpeed);
         
     }
@@ -35,14 +31,7 @@ public class Meteorito3hits extends ObjetoEspacial{
             // Verificamos si el meteorito se salió de la pantalla verticalmente
             if (sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight() - sprite.getHeight()) {
                 reboteY();
-            }
-            
-            // Verificar si el meteorito ha salido completamente de la pantalla
-            if (sprite.getX() + sprite.getWidth() < 0 || sprite.getX() > Gdx.graphics.getWidth() || sprite.getY() + sprite.getHeight() < 0 || sprite.getY() > Gdx.graphics.getHeight()) {
-                setDestruir(); // Marcar el meteorito como destruido
-            }
-            
-            
+            }   
         }
     }
 

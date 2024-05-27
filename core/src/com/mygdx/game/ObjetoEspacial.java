@@ -9,9 +9,7 @@ public abstract class ObjetoEspacial implements Destructible {
     protected Sprite sprite;
     protected boolean destruido;
     protected int hits,hitsMax;
-    
-    
-   
+
     public ObjetoEspacial(float x, float y, int size, Texture texture,int hits, int hitsMax) {
         this.sprite = new Sprite(texture);
         //this.sprite.setSize(size, size);
@@ -25,7 +23,6 @@ public abstract class ObjetoEspacial implements Destructible {
     public void dibujo(SpriteBatch batch){
         if(!destruido){
             sprite.draw(batch);
-  
         }  
     }
     

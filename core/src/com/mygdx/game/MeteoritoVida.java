@@ -31,10 +31,7 @@ public class MeteoritoVida extends ObjetoEspacial{
             if (sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight() - sprite.getHeight()) {
                 reboteY();
             }
-            // Verificar si el meteorito ha salido completamente de la pantalla
-            if (sprite.getX() + sprite.getWidth() < 0 || sprite.getX() > Gdx.graphics.getWidth() || sprite.getY() + sprite.getHeight() < 0 || sprite.getY() > Gdx.graphics.getHeight()) {
-                setDestruir(); // Marcar el meteorito como destruido
-            }
+            
             
         }
     }
