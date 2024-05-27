@@ -4,19 +4,35 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-
 public class PantallaMenu implements Screen {
-
 	private SpaceNavigation game;
 	private OrthographicCamera camera;
+        
+        private Texture[] animationFrames;
+        private float frameDuration = 0.5f; // Duración de cada frame en segundos
+        private float elapsedTime = 0f;
+        private int currentFrameIndex = 0;
+        private Music backgroundMusic;
 
 	public PantallaMenu(SpaceNavigation game) {
-		this.game = game;
-        
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1200, 800);
+            this.game = game;
+                
+            camera = new OrthographicCamera();
+            camera.setToOrtho(false, 1200, 800);
+                
+            animationFrames = new Texture[2];
+            animationFrames[0] = new Texture(Gdx.files.internal("portada1.jpg"));
+            animationFrames[1] = new Texture(Gdx.files.internal("portada2.jpg"));
+                
+            // Cargar la música
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("DigestiveBiscuit.mp3"));
+            backgroundMusic.setLooping(false); // Hacer que la música se repita
+            backgroundMusic.setVolume(0.1f); // Ajustar el volumen
 	}
 
 	@Override
@@ -26,16 +42,23 @@ public class PantallaMenu implements Screen {
 		camera.update();
 		game.getBatch().setProjectionMatrix(camera.combined);
 
-		game.getBatch().begin();
-		game.getFont().draw(game.getBatch(), "Bienvenido a Space Navigation !", 140, 400);
-		game.getFont().draw(game.getBatch(), "Pincha en cualquier lado o presiona cualquier tecla para comenzar ...", 100, 300);
+                // Actualiza el índice del frame actual basado en el tiempo transcurrido
+                elapsedTime += delta;
+                if (elapsedTime >= frameDuration) {
+                    elapsedTime -= frameDuration;
+                    currentFrameIndex = (currentFrameIndex + 1) % animationFrames.length;
+                }
 	
-		game.getBatch().end();
+		game.getBatch().begin();
+                
+                // Dibujar la animación
+                game.getBatch().draw(animationFrames[currentFrameIndex], 0, 0, 1200, 800); // Ajusta las coordenadas según sea necesario
+                
+                game.getBatch().end();
 
 		if (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-			Screen ss = new PantallaJuego(game,1,700,0,1,1,17);
-			
-                        ss.resize(1200, 800);
+			Screen ss = new PantallaJuego(game,1,3,0,1,1,10);
+			ss.resize(1200, 800);
 			game.setScreen(ss);
 			dispose();
 		}
@@ -44,8 +67,7 @@ public class PantallaMenu implements Screen {
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+            backgroundMusic.play();
 	}
 
 	@Override
@@ -68,14 +90,19 @@ public class PantallaMenu implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-		
+            backgroundMusic.stop();
 	}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+    public void dispose() {
+        for (Texture frame : animationFrames) {
+            frame.dispose(); // Liberar las texturas de los frames
+        }
+        backgroundMusic.dispose();
+    }
+
+    private void draw(SpriteBatch batch, String _______space_navigation, int i, int i0) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
    
 }

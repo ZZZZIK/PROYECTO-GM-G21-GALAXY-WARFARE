@@ -150,6 +150,10 @@ public class Nave4 {
  	   return herido;
     }
     
+    public void ganarVida() {
+        vidas++;
+    }
+    
     public int getVidas() {return vidas;}
     //public boolean isDestruida() {return destruida;}
     public int getX() {return (int) spr.getX();}

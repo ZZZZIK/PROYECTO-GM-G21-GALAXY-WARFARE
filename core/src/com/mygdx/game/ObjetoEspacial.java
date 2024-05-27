@@ -13,7 +13,7 @@ public abstract class ObjetoEspacial implements Destructible {
    
     public ObjetoEspacial(float x, float y, int size, Texture texture,int hits, int hitsMax) {
         this.sprite = new Sprite(texture);
-        this.sprite.setSize(size, size);
+        //this.sprite.setSize(size, size);
         this.sprite.setPosition(x, y);
         this.destruido = false;
         this.hits = hits;
@@ -49,7 +49,7 @@ public abstract class ObjetoEspacial implements Destructible {
         return sprite;
     }
    
-    
+  
     // Método para en caso de colision de dos obj espaciales, concretamente meteoritos en consecuencia rebote
     public void rebote(ObjetoEspacial objE) {
         if (!destruido && !objE.getEstaDestruido() && this.verificarColision(objE.sprite)) {
@@ -69,6 +69,13 @@ public abstract class ObjetoEspacial implements Destructible {
         }
         
     }
+
+
+    
+    // Método para en caso de colisión de dos obj espaciales, concretamente meteoritos en consecuencia rebote
+    
+
+    
 
     // Métodos abstractos que los hijos pueden utilizar para el manejo del rebote
     protected abstract void reboteX();

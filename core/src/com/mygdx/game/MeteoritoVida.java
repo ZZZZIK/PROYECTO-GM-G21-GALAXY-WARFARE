@@ -8,29 +8,24 @@ import com.badlogic.gdx.math.Rectangle;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Meteorito3hits extends ObjetoEspacial{
+public class MeteoritoVida extends ObjetoEspacial{
 
+    private int hits;
     private Vector2 velocidad;
-    
-   
-    public Meteorito3hits(int x, int y, int size, int xSpeed, int ySpeed, Texture tx) {
-        super(x,y,size,tx,0,3);
-        
+
+    public MeteoritoVida(int x, int y, int size, int xSpeed, int ySpeed, Texture tx) {        
+        super(x,y,size,tx,0,1);
         //Creamos un vector con los componentes X e Y de la velocidad
-        //this.sprite.setSize(800, 800);
         this.velocidad = new Vector2(xSpeed, ySpeed);
-        
     }
 
     public void update() {
         if (!getEstaDestruido()) {
             // Mueve el sprite a una nueva posición tomando los componentes X e Y de la velocidad.
             sprite.translate(velocidad.x, velocidad.y);
-
             // Verificamos si el meteorito se salió de la pantalla horizontalmente
             if (sprite.getX() < 0 || sprite.getX() > Gdx.graphics.getWidth() - sprite.getWidth()) {
                 reboteX();
-
             }
             // Verificamos si el meteorito se salió de la pantalla verticalmente
             if (sprite.getY() < 0 || sprite.getY() > Gdx.graphics.getHeight() - sprite.getHeight()) {
@@ -50,17 +45,4 @@ public class Meteorito3hits extends ObjetoEspacial{
         // Cuando rebota en Y
         velocidad.y = -velocidad.y;
     }
-   
-    
-    
-   
-    
-    
-    
-    
-    
-}  
-    
-    
-    
-
+}

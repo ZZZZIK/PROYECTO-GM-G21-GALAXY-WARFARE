@@ -26,22 +26,14 @@ public class PantallaJuego implements Screen {
 	private int velXAsteroides; 
 	private int velYAsteroides; 
 	private int cantAsteroides;
-	
-	 
-        private Nave4 nave;
-        private ArrayList<MeteoritoComun > asteroides = new ArrayList<>();
-        private ArrayList<Bala> balas = new ArrayList<>();
         
-        private ArrayList<Meteorito3hits> asteroide3 = new ArrayList<>();
+        private Texture backgroundTexture;
 
-
-         // Combinar las listas de asteroides normales y de 3 hits en una sola lista
+        private Nave4 nave;      
+        private ArrayList<Bala> balas = new ArrayList<>();
+         // Combinar asteroides normales y de 3 hits en una sola lista
         private ArrayList<ObjetoEspacial> todosAsteroides = new ArrayList<>();
        
-        
-        
-        
-
 	public PantallaJuego(SpaceNavigation game, int ronda, int vidas, int score,  
             int velXAsteroides, int velYAsteroides, int cantAsteroides) {
             this.game = game;
@@ -55,178 +47,120 @@ public class PantallaJuego implements Screen {
             camera = new OrthographicCamera();	
             camera.setToOrtho(false, 800, 640);
 
+            // importamos nuevo fondo
+            backgroundTexture = new Texture("Background.png");
+            
+            
             // Inicializar assets; música de fondo y efectos de sonido
-            gameMusic = Gdx.audio.newMusic(Gdx.files.internal("piano-loops.wav"));
+            gameMusic = Gdx.audio.newMusic(Gdx.files.internal("RushjetDanooct.mp3"));
+            explosionSound = Gdx.audio.newSound(Gdx.files.internal("destruirMeterorito.mp3"));
+            explosionSound.setVolume(1, 0.1f);
+            
+            
             gameMusic.setLooping(true);
-            gameMusic.setVolume(0.0f);
+            gameMusic.setVolume(0.1f);
             gameMusic.play();
 
             // Cargar imagen de la nave, 64x64   
             nave = new Nave4(Gdx.graphics.getWidth() / 2 - 50, 30, new Texture(Gdx.files.internal("MainShip3.png")),
-                Gdx.audio.newSound(Gdx.files.internal("hurt.ogg")), 
-                new Texture(Gdx.files.internal("Rocket2.png")),
-                Gdx.audio.newSound(Gdx.files.internal("pop-sound.mp3")));
+                Gdx.audio.newSound(Gdx.files.internal("herido.mp3")), 
+                new Texture(Gdx.files.internal("bala.png")),
+                Gdx.audio.newSound(Gdx.files.internal("tirarBala.mp3")));
             nave.setVidas(vidas);
 
             // Crear asteroides
             Random r = new Random();
             for (int i = 0; i < cantAsteroides; i++) {
-                if (i % 5 == 4) {
-                    MeteoritoComun ball = new MeteoritoComun(r.nextInt(Gdx.graphics.getWidth()),
+                MeteoritoComun ball = new MeteoritoComun(r.nextInt(Gdx.graphics.getWidth()),
                             50 + r.nextInt(Gdx.graphics.getHeight() - 50),
-                            30+ r.nextInt(30), velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4), 
+                            800+ r.nextInt(30), velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4), 
                             new Texture(Gdx.files.internal("meteoro.png")));
-                    asteroides.add(ball);
-
+                    todosAsteroides.add(ball);
+                
+                if (i % 5 == 4) {
                     Meteorito3hits strongBall = new Meteorito3hits(r.nextInt(Gdx.graphics.getWidth()),
                             50 + r.nextInt(Gdx.graphics.getHeight() - 50),
                             35+ r.nextInt(30), velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4), 
                             new Texture(Gdx.files.internal("meteorito3tiros.png")));
-                    asteroide3.add(strongBall);
-                }
-                else {
-                    MeteoritoComun ball = new MeteoritoComun(r.nextInt(Gdx.graphics.getWidth()),
+                    todosAsteroides.add(strongBall);
+                }else if(i % 10 == 0){
+                    MeteoritoVida meteoroVida = new MeteoritoVida(r.nextInt(Gdx.graphics.getWidth()),
                             50 + r.nextInt(Gdx.graphics.getHeight() - 50),
                             30+ r.nextInt(30), velXAsteroides + r.nextInt(4), velYAsteroides + r.nextInt(4), 
-                            new Texture(Gdx.files.internal("meteoro.png")));
-                    asteroides.add(ball);
+                            new Texture(Gdx.files.internal("meteoroSalud.png")));
+                    todosAsteroides.add(meteoroVida);
                 }
-            }
-            todosAsteroides.addAll(asteroides);
-            todosAsteroides.addAll(asteroide3);
+            }    
+            
+            
+            
         }
         public void dibujaEncabezado() {
-            CharSequence str = "Vidas: " + nave.getVidas() + " Ronda: " + ronda;
-            game.getFont().getData().setScale(2f);		
-            game.getFont().draw(batch, str, 10, 30);
-            game.getFont().draw(batch, "Score:" + this.score, Gdx.graphics.getWidth() - 150, 30);
-            game.getFont().draw(batch, "HighScore:" + game.getHighScore(), Gdx.graphics.getWidth() / 2 - 100, 30);
-        }
+            float screenHeight = 640;
+            float yOffset = -140;
 
-    
+            CharSequence str = "Vidas: " + nave.getVidas() + "   Nivel: " + ronda;
+            game.getFont().getData().setScale(2.5f);
+            game.getFont().draw(batch, str, 120, screenHeight - yOffset);
+            game.getFont().draw(batch, "Score: " + this.score, 850, screenHeight - yOffset);
+            game.getFont().draw(batch, "HighScore: " + game.getHighScore(), (800 / 2) + 100 , screenHeight - yOffset);
+        }
+        
         public void render(float delta) {
-            
             ScreenUtils.clear(0, 0, 0.2f, 1);
             batch.begin();
+            //dibujaEncabezado();
+            batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             dibujaEncabezado();
             batch.end();
 
             batch.begin();
             
-            
-                    
-            
             nave.draw(batch,this);
 
             if (!nave.estaHerido()) {
-                
-                
-                
+
                 // Colisiones entre balas y asteroides y su destrucción
                 for (int i = 0; i < balas.size(); i++) {
                     Bala b = balas.get(i);
                     b.update();
-                    for (int j = 0; j < asteroides.size(); j++) {
-                        MeteoritoComun mc = asteroides.get(j);
-                        if (b.verificarColision(mc.getSprite())) {
-                            score += 10;
+                    for (int j = 0; j < todosAsteroides.size(); j++) {
+                        ObjetoEspacial meteoro = todosAsteroides.get(j);
+                        if (b.verificarColision(meteoro.getSprite())) {              
+                            // Si el objeto es un asteroide
+                            if (meteoro instanceof MeteoritoComun || meteoro instanceof Meteorito3hits || meteoro instanceof MeteoritoVida) {
+                                if (meteoro instanceof MeteoritoComun) {
+                                    score += 10;
+                                } else if (meteoro instanceof Meteorito3hits) {
+                                    score += 20;
+                                } else if(meteoro instanceof MeteoritoVida){
+                                    score += 10;
+                                    nave.ganarVida();
+                                }
+                                
+                                meteoro.setDestruir();
+
+                                if (meteoro.getEstaDestruido()) {
+                                    explosionSound.play();
+                                    todosAsteroides.remove(j);
+                                    j--; // Ajustar el índice después de eliminar un asteroide
+                                }
+                            }
                             b.setDestruir();
-                            mc.setDestruir();
-                            
-                            if (b.getEstaDestruido()){
+                            if (b.getEstaDestruido()) {
                                 balas.remove(b);
+                                i--; // Ajustar el índice después de eliminar una bala
                             }
-                            
-                            if (mc.getEstaDestruido()){
-                                asteroides.remove(mc);
-                            }
-                            
-                            break; // Rompe el bucle interno, ya que la bala colisionó con un solo asteroide
-                        }
-                    }  
-                    
-                    for (int k = 0; k < asteroide3.size(); k++) {
-                        Meteorito3hits meteoro3 = asteroide3.get(k);
-                        if (b.verificarColision(meteoro3.getSprite())) {
-                            //explosionSound.play();
-                            meteoro3.setDestruir();
-                            b.setDestruir();
-                            
-                            
-                            if (meteoro3.getEstaDestruido()) {
-                                asteroide3.remove(k);
-                                score += 20;
-                                k--;
-                            }
-                            
-                            if (b.getEstaDestruido()){
-                                balas.remove(b);
-                            }
-                           
                             break;
-                        }
-                    }
-                    /*
-                    for(int j = 0; j < todosAsteroides.size(); j++){
-                        ObjetoEspacial meteoro =todosAsteroides.get(i);
-                        if(b.verificarColision(meteoro.getSprite())){
-                            if (meteoro instanceof MeteoritoComun) {
-                                score += 10;
-                            } else if (meteoro instanceof Meteorito3hits) {
-                                score += 20;
-                            }
-                            
-                            
-                            meteoro.setDestruir();
-                            b.setDestruir();
-                            
-                        }
-                    
-                    }
-                    */
-                    
-                    
-                    
-                    
-                }
-                
-               
+                        }  
+                    }       
+                }    
                 // Actualizar movimiento de asteroides dentro del área
-                
                 for(ObjetoEspacial meteoro: todosAsteroides){
-                    meteoro.update();
-                
-                }
-                
-                /*
-               
-                   
-                for (int i = 0; i < asteroides.size(); i++) {
-                    ObjetoEspacial obj1 = asteroides.get(i);
-                    for (int j = i + 1; j < asteroides.size(); j++) {
-                        ObjetoEspacial obj2 = asteroides.get(j);
-                        obj1.rebote(obj2);
-                    }
-                }
+                    meteoro.update();               
+                }       
                 
                 
-                for (int i = 0; i < asteroide3.size(); i++) {
-                    ObjetoEspacial obj1 = asteroide3.get(i);
-                    for (int j = i + 1; j < asteroide3.size(); j++) {
-                        ObjetoEspacial obj2 = asteroide3.get(j);
-                        obj1.rebote(obj2);
-                    }
-                }
-
-                */
-
-
-
-
-
-
-
-                // Colisiones entre asteroides y sus rebotes
                 // Calcular los rebotes entre todos los asteroides
                 for (int i = 0; i < todosAsteroides.size(); i++) {
                     ObjetoEspacial obj1 = todosAsteroides.get(i);
@@ -235,15 +169,7 @@ public class PantallaJuego implements Screen {
                         obj1.rebote(obj2);
                     }
                 }
-                
-                
-                
-                
-               
-                
-                
-                
-                
+
             }
 
             // Dibujar balas
@@ -252,51 +178,21 @@ public class PantallaJuego implements Screen {
             }
             
             // Dibujar asteroides y manejar colisión con nave
-            
-            
-            
-            for (int i = 0; i < asteroides.size(); i++) {
-                MeteoritoComun mc = asteroides.get(i);
-                mc.dibujo(batch);
-                if (nave.checkCollision(mc)) {
-   
-                    asteroides.remove(mc);
-                    i--; // Decrementar el índice para evitar saltarse elementos después de eliminarlos
-                }
-            }
-            
-            for (int i = 0; i < asteroide3.size(); i++) {
-                Meteorito3hits mc3 = asteroide3.get(i);
-                mc3.dibujo(batch);
-                if (nave.checkCollision(mc3)) {
-                    mc3.setDestruir();
-                    if(mc3.getEstaDestruido()){
-                        asteroide3.remove(mc3);
-                        i--; // Decrementar el índice para evitar saltarse elementos después de eliminarlos
-                    }
-                }
-            }
-           
-            
-            
-            /*
+  
             for (int i = 0; i < todosAsteroides.size(); i++) {
                 ObjetoEspacial  mc3 = todosAsteroides.get(i);
                 mc3.dibujo(batch);
                 if (nave.checkCollision(mc3)) {
                     mc3.setDestruir();
+                    
+                    
                     if(mc3.getEstaDestruido()){
                         todosAsteroides.remove(mc3);
                         i--; // Decrementar el índice para evitar saltarse elementos después de eliminarlos
                     }
                 }
             }
-            */
-           
-            
-            
-            
-           
+
             if (nave.estaDestruido()) {
                 if (score > game.getHighScore()) {
                     game.setHighScore(score);
@@ -307,27 +203,18 @@ public class PantallaJuego implements Screen {
                 dispose();
             }
             
-            
+            batch.end();  
             // Nivel completado
-            if (asteroides.size() == 0 && asteroide3.size() == 0) {
+            if(todosAsteroides.size()==0){
                 Screen ss = new PantallaJuego(game, ronda + 1, nave.getVidas(), score,
-                                              velXAsteroides + 1, velYAsteroides + 1, cantAsteroides + 5);
+                                              velXAsteroides + 1, velYAsteroides + 1, cantAsteroides + 3);
                 ss.resize(1200, 800);
                 game.setScreen(ss);
                 dispose();
             }
-            batch.end();
-           
+                   
         }
-    
-        
-        
-        
-        
-        
-        
-        
- 
+
         public boolean agregarBala(Bala bb) {
             return balas.add(bb);
         }
@@ -356,7 +243,7 @@ public class PantallaJuego implements Screen {
 
         @Override
         public void dispose() {
-            //explosionSound.dispose();
+            explosionSound.dispose();
             gameMusic.dispose();
         }
 }

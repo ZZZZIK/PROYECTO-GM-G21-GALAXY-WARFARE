@@ -13,7 +13,7 @@ public class Bala extends ObjetoEspacial {
     public Bala(float x, float y, int xSpeed, int ySpeed, Texture tx) {
 
         
-        super(x, y, 10, tx,0,1); // Assuming the bullet size is 10
+        super(x, y, 0 , tx,0,1); // Assuming the bullet size is 10
         this.speed = new Vector2(xSpeed, ySpeed);
     }
 
