@@ -48,7 +48,7 @@ public class PantallaJuego implements Screen {
     }
 
     public void mostrarGameover() {
-        if (nave.estaDestruido()) {
+        if (nave.getEstaDestruido()) {
             if (score > game.getHighScore()) {
                 game.setHighScore(score);
             }
@@ -75,7 +75,7 @@ public class PantallaJuego implements Screen {
    
     public void render(float delta) {
         prepararEscenario();
-        if (!nave.estaHerido()) {
+        if (!nave.getEstaDestruido()) {
             int puntosGanados = gestorMeteoros.colisionBalaAsteroide(nave); //destrucción
             score += puntosGanados;
             gestorMeteoros.actualizarMovimientoAsteroides(); //dentro del área
