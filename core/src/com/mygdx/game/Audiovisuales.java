@@ -84,6 +84,14 @@ public class Audiovisuales {
         game.getFont().draw(batch, "Score: " + score, 850, screenHeight - yOffset);
         game.getFont().draw(batch, "HighScore: " + game.getHighScore(), (800 / 2) + 100, screenHeight - yOffset);
     }
+    
+    public void mostrarTurbo(boolean turboActivado) {
+        if (turboActivado) {
+            game.getFont().getData().setScale(2.5f);
+            game.getFont().draw(batch, "Turbo Activado", 500, 700);
+        }
+    }
+    
 
     public void reproducirMusica() {
         gameMusic.play();
@@ -148,4 +156,9 @@ public class Audiovisuales {
     public OrthographicCamera getCamera() {
         return camera;
     }
+    
+    
+    
+    
+    
 }

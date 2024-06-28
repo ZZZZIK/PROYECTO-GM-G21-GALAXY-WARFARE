@@ -10,11 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class Nave4 extends Jugador {
     private Sound soundBala;
     private Texture txBala;
+    private MovimientoStrategy movimientoStrategy;
+    private boolean turboActivado = false;
 
     public Nave4(int x, int y, Texture tx, Sound soundChoque, Texture txBala, Sound soundBala) {
         super(x, y, tx, soundChoque);
         this.soundBala = soundBala;
         this.txBala = txBala;
+        this.movimientoStrategy = new MovimientoNormal();
     }
 
     private void disparar(GestorMeteoritos gestorMeteoros) {
@@ -30,5 +33,26 @@ public class Nave4 extends Jugador {
         super.draw(batch, gestorMeteoros);
         // Llamamos a la función disparar de la nave
         disparar(gestorMeteoros);
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+            cambiarEstrategia();
+        }
+
+        movimientoStrategy.mover(this);
     }
+
+    private void cambiarEstrategia() {
+        if (movimientoStrategy instanceof MovimientoNormal) {
+            movimientoStrategy = new MovimientoTurbo();
+            turboActivado = true;
+        } else {
+            movimientoStrategy = new MovimientoNormal();
+            turboActivado = false;
+        }
+    }
+    
+    public boolean isTurboActivado() {
+        return turboActivado;
+    }
+    
 }

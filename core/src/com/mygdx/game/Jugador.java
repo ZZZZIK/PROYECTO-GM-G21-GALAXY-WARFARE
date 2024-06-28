@@ -106,7 +106,7 @@ public abstract class Jugador implements Destructible {
 
             // La nave se va frenando cuando la velocidad disminuye
             frenadoVelMin();
-
+ 
             // Función para que se mantenga dentro de los bordes de la ventana
             mantenerJugadorEnPantalla(x, y);
 
@@ -171,6 +171,28 @@ public abstract class Jugador implements Destructible {
         destruida=true;
     }
     
-}
+    public float getXVel() {
+        return xVel;
+    }
 
+    public void setXVel(float xVel) {
+        this.xVel = xVel;
+    }
+
+    public float getYVel() {
+        return yVel;
+    }
+
+    public void setYVel(float yVel) {
+        this.yVel = yVel;
+    }
+    
+    public void setMoveAmount(int moveAmount){
+        this.moveAmount=moveAmount;
+    }
+    
+    
+    
+    
+}
 

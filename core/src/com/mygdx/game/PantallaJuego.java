@@ -83,6 +83,9 @@ public class PantallaJuego extends PantallaBase {
         audioVisuales.dibujarFondo();
         dibujarNave();
         audioVisuales.dibujaEncabezado(nave, score, ronda);
+        
+        audioVisuales.mostrarTurbo(nave.isTurboActivado());
+        
         gestorMeteoros.dibujarBalas();
         gestorMeteoros.dibujarAsteroide();
         gestorMeteoros.colisionConNave(nave); // Colisiones meteoritos con la nave
