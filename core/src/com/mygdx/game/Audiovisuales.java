@@ -7,30 +7,39 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.Random;
 
 public class Audiovisuales {
+    // para patrón de diseño Singleton
+    private static Audiovisuales instanciaUnica;
+
     private Sound explosionSound;
     private Music gameMusic;
     private SpriteBatch batch;
     private OrthographicCamera camera;
     private Texture backgroundTexture;
     private SpaceNavigation game;
-    
+
     private float minX = Gdx.graphics.getWidth() / 4f; 
     private float maxX = Gdx.graphics.getWidth() * 3.5f / 4f; 
-        
     private float minY = Gdx.graphics.getHeight() / 4f; 
     private float maxY = Gdx.graphics.getHeight() * 3.5f / 4.0f; 
-    
-    
 
-    // Constructor
-    public Audiovisuales(SpaceNavigation game) {
+    // Constructor PATRON SINGLETON
+    private Audiovisuales(SpaceNavigation game) {
         this.game = game;
+        
+        
     }
 
+    // Método para obtener la instancia única
+    public static Audiovisuales obtenerInstancia(SpaceNavigation game) {
+        if (instanciaUnica == null) {
+            instanciaUnica = new Audiovisuales(game);
+        }
+        return instanciaUnica;
+    }
+    
     public void generarAudioJuego() {
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("destruirMeterorito.mp3"));
         explosionSound.setVolume(1, 0.1f);
@@ -38,33 +47,33 @@ public class Audiovisuales {
         gameMusic.setLooping(true);
         gameMusic.setVolume(0.1f);
         gameMusic.play();
+        
     }
-    public void reproducirSonidoExplosion(){
+
+    public void reproducirSonidoExplosion() {
         explosionSound.play();
     }
-    
-    public void desaparecerFondo(){
+
+    public void desaparecerFondo() {
         backgroundTexture.dispose();
     }
-    
+
     public SpriteBatch crearPantalla() {
         batch = game.getBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1200, 800);
-        //camera.setToOrtho(false, 800, 640);
         return batch;
     }
 
     public void crearFondo() {
         backgroundTexture = new Texture("Background.png");
-       
     }
-    
-    
-    public void dibujarFondo(){
+
+    public void dibujarFondo() {
         batch.setProjectionMatrix(camera.combined);
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
+
     public void dibujaEncabezado(Nave4 nave, int score, int ronda) {
         float screenHeight = 640;
         float yOffset = -140;
@@ -75,11 +84,12 @@ public class Audiovisuales {
         game.getFont().draw(batch, "Score: " + score, 850, screenHeight - yOffset);
         game.getFont().draw(batch, "HighScore: " + game.getHighScore(), (800 / 2) + 100, screenHeight - yOffset);
     }
-    
+
     public void reproducirMusica() {
         gameMusic.play();
     }
-    public void pararMusica(){
+
+    public void pararMusica() {
         gameMusic.dispose();
     }
 
@@ -122,8 +132,6 @@ public class Audiovisuales {
         return meteoroVida;
     }
 
-    
-
     public void dibujarBalas(Bala b) {
         b.dibujo(batch);
     }
@@ -132,11 +140,12 @@ public class Audiovisuales {
         Screen ss = new PantallaGameOver(game);
         ss.resize(1200, 800);
         game.setScreen(ss);
-    }
+       
+        //gameMusic.dispose();
     
-    public OrthographicCamera getCamera(){
+    }
+
+    public OrthographicCamera getCamera() {
         return camera;
     }
-    
-    
 }

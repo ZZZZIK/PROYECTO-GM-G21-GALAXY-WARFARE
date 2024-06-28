@@ -47,15 +47,6 @@ public class Meteorito3hits extends ObjetoEspacial{
         // Cuando rebota en Y
         velocidad.y = -velocidad.y;
     }
-   
-    
-    
-   
-    
-    
-    
-    
-    
 }  
     
     
