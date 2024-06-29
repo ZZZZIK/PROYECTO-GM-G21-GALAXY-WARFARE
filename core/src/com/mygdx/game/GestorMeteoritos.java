@@ -4,22 +4,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 
 public class GestorMeteoritos {
-    
     private int cantAsteroides;
     private Audiovisuales audiovisuales;
     private SpriteBatch batch;
     private int velXAsteroides;
     private int velYAsteroides;
+    private MeteoritoFactory meteoritoFactory;
     
     private ArrayList<Bala> balas = new ArrayList<>();
     private ArrayList<ObjetoEspacial> todosAsteroides = new ArrayList<>();
     
-    public GestorMeteoritos(SpriteBatch batch ,int velXAsteroides,int velYAsteroides, Audiovisuales audiovisuales,int cantAsteroides){
+    public GestorMeteoritos(SpriteBatch batch ,int velXAsteroides,int velYAsteroides, Audiovisuales audiovisuales,int cantAsteroides, MeteoritoFactory meteoritoFactory){
         this.cantAsteroides = cantAsteroides;
         this.audiovisuales=audiovisuales;
         this.batch=batch;
         this.velXAsteroides=velXAsteroides;
         this.velYAsteroides=velYAsteroides;
+        this.meteoritoFactory = meteoritoFactory;
     }
 
     public void crearAsteroides() {
@@ -35,6 +36,17 @@ public class GestorMeteoritos {
             }
         }
     }
+    
+    public void renderAsteroides() {
+        for (ObjetoEspacial m : todosAsteroides) {
+            m.update();
+            m.dibujo(batch);
+        }
+    }
+
+    public ArrayList<ObjetoEspacial> getMeteoritos() {
+        return todosAsteroides;
+    }
 
     public void dibujarAsteroide() {
         for (ObjetoEspacial mc3 : todosAsteroides) {
@@ -43,11 +55,7 @@ public class GestorMeteoritos {
     }
 
     public boolean hayMeteoritos() {
-        if(todosAsteroides.size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return !todosAsteroides.isEmpty();
     }
 
     public void colisionConNave(Nave4 nave) {
@@ -99,7 +107,7 @@ public class GestorMeteoritos {
         }
         balas.removeAll(balasAEliminar);
         todosAsteroides.removeAll(asteroidesAEliminar);
-        
+
         return sumaScore;
     }
 

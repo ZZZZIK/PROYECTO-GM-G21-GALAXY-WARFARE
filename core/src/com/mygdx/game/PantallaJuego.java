@@ -12,6 +12,7 @@ public class PantallaJuego extends PantallaBase {
     private Nave4 nave;
     private Audiovisuales audioVisuales;
     private GestorMeteoritos gestorMeteoros;
+    
 
     public PantallaJuego(SpaceNavigation game, int ronda, int vidas, int score,
                          int velXAsteroides, int velYAsteroides, int cantAsteroides) {
@@ -30,7 +31,11 @@ public class PantallaJuego extends PantallaBase {
         
         audioVisuales.crearFondo();
 
-        gestorMeteoros = new GestorMeteoritos(batch, velXAsteroides, velYAsteroides, audioVisuales, cantAsteroides);
+        MeteoritoFactory meteoritoFactory = new ImplementMeteoritoFactory();
+        gestorMeteoros = new GestorMeteoritos(batch, velXAsteroides, velYAsteroides, audioVisuales, cantAsteroides, meteoritoFactory);
+        
+        
+        
         gestorMeteoros.crearAsteroides();
 
         nave = audioVisuales.dibujarNave(vidas);
