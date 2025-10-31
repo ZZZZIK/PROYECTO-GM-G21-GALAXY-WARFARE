@@ -4,7 +4,7 @@
 
 ## Descripción
 
-Mejoramiento de un videojuego base desarrollado en lenguaje C como parte de la asignatura Programación Avanzada. El proyecto incluyó:
+Mejoramiento de un videojuego base desarrollado en lenguaje Java como parte de la asignatura Programación Avanzada. El proyecto incluyó:
 
 - Implementación de estructuras y funciones adicionales para mejorar la lógica del juego
 - Optimización de funcionalidades existentes
